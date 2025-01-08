@@ -12,6 +12,7 @@ export const handleRegister = async (
   res: Response
 ): Promise<any> => {
   const requiredBody = z.object({
+    username: z.string().min(6, "Username should be minimum 6 characters") ,
     email: z.string().email("Enter a Valid Email"),
     password: z
       .string()
@@ -30,7 +31,7 @@ export const handleRegister = async (
     });
   }
 
-  const { email, password } = parseBody.data;
+  const { username, email, password } = parseBody.data;
 
   try {
     const user = await UserModel.findOne({ email });
@@ -44,6 +45,7 @@ export const handleRegister = async (
     const hashPassword = await bcryptjs.hash(password, 12);
 
     await UserModel.create({
+      username,
       email,
       password: hashPassword,
     });
@@ -63,6 +65,7 @@ export const handleLogin = async (
   res: Response
 ): Promise<any> => {
   const requiredBody = z.object({
+    username: z.string().min(6, "Username should be minimum 6 characters"),
     email: z.string().email("Enter a Valid Email"),
     password: z
       .string()
@@ -79,10 +82,10 @@ export const handleLogin = async (
     });
   }
 
-  const { email, password } = parseBody.data;
+  const { username, password } = parseBody.data;
 
   try {
-    const user = await UserModel.findOne({ email });
+    const user = await UserModel.findOne({ username });
 
     if (!user) {
       return res.status(403).json({

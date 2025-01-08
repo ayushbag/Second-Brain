@@ -21,6 +21,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const handleRegister = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const requiredBody = zod_1.z.object({
+        username: zod_1.z.string().min(6, "Username should be minimum 6 characters"),
         email: zod_1.z.string().email("Enter a Valid Email"),
         password: zod_1.z
             .string()
@@ -35,7 +36,7 @@ const handleRegister = (req, res) => __awaiter(void 0, void 0, void 0, function*
             errors: parseBody.error.errors,
         });
     }
-    const { email, password } = parseBody.data;
+    const { username, email, password } = parseBody.data;
     try {
         const user = yield model_1.UserModel.findOne({ email });
         if (user !== null) {
@@ -45,6 +46,7 @@ const handleRegister = (req, res) => __awaiter(void 0, void 0, void 0, function*
         }
         const hashPassword = yield bcryptjs_1.default.hash(password, 12);
         yield model_1.UserModel.create({
+            username,
             email,
             password: hashPassword,
         });
@@ -61,6 +63,7 @@ const handleRegister = (req, res) => __awaiter(void 0, void 0, void 0, function*
 exports.handleRegister = handleRegister;
 const handleLogin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const requiredBody = zod_1.z.object({
+        username: zod_1.z.string().min(6, "Username should be minimum 6 characters"),
         email: zod_1.z.string().email("Enter a Valid Email"),
         password: zod_1.z
             .string()
@@ -74,9 +77,9 @@ const handleLogin = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             errors: parseBody.error.errors,
         });
     }
-    const { email, password } = parseBody.data;
+    const { username, password } = parseBody.data;
     try {
-        const user = yield model_1.UserModel.findOne({ email });
+        const user = yield model_1.UserModel.findOne({ username });
         if (!user) {
             return res.status(403).json({
                 message: "User not Exists- Signup first",
