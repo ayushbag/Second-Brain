@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { ContentModel, LinkModel } from "../model";
+import { ContentModel, LinkModel, UserModel } from "../model";
 import { random } from "../utils/random";
 
 export const createSharableLink = async (req: Request, res: Response):Promise<any> => {
@@ -63,8 +63,13 @@ export const getContentsViaShareLink = async (req: Request, res: Response):Promi
         })
     }
 
+    const user = await UserModel.findOne({
+        userId: link.userId
+    })
+
     return res.status(200).json({
         message: 'Content found!',
+        user: user,
         content: content
     })
 }   

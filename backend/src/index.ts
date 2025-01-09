@@ -19,7 +19,7 @@ connectDB()
 
 app.use("/user", userRouter);
 app.use("/content", authMiddleware, contentRouter)
-app.use("/brain", authMiddleware, brainShareRouter)
+app.use("/brain", brainShareRouter)
 app.use("/tags", authMiddleware, tagsRouter)
 
 const PORT = process.env.PORT || 5000
