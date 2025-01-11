@@ -1,8 +1,7 @@
 import { ReactElement } from "react";
 import { IconSize, IconSizeInterface } from "./types";
 
-
-export const ShareIcon = (props: IconSizeInterface):ReactElement => {
+export const ShareIcon = (): ReactElement => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -10,7 +9,7 @@ export const ShareIcon = (props: IconSizeInterface):ReactElement => {
       viewBox="0 0 24 24"
       strokeWidth={1.5}
       stroke="currentColor"
-      className={IconSize[props.size]}
+      className="size-5"
     >
       <path
         strokeLinecap="round"
