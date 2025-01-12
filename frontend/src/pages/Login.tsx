@@ -1,0 +1,65 @@
+import { UserRound } from "lucide-react";
+import GoogleIcon from "../icon/GoogleIcon";
+
+const Login = () => {
+  return (
+    <section className="flex items-center justify-center mx-auto text-white h-screen bg-zinc-950">
+      <div className="w-full lg:w-3/5 mx-auto flex items-center justify-center h-full pt-9 relative">
+        <div className="absolute top-4 right-4 text-zinc-200 flex items-center justify-center space-x-2 font-mona font-light">
+          <p className="text-xs text-zinc-300">New here?</p>
+          <button 
+            className="text-zinc-100 text-sm bg-zinc-800 px-2 py-1 border border-zinc-500 hover:bg-zinc-700 rounded-md hover:no-underline"
+          >
+            Register
+          </button>
+        </div>
+        <div className="text-center flex flex-col items-center justify-center">
+          <div className="flex flex-col items-center">
+            <div className="p-4 bg-zinc-900 rounded-full mb-2 border border-zinc-800">
+              <UserRound />
+            </div>
+            <h2 className="font-dmSans text-2xl font-semibold py-1">
+              Login to your Account
+            </h2>
+            <p className="font-mona text-xs text-zinc-200">
+              Enter your details to Login
+            </p>
+          </div>
+          <form className="flex flex-col font-mona text-start pt-6 w-64">
+            <label htmlFor="email" className="text-sm text-zinc-200">
+              Email
+            </label>
+            <input
+              type="text"
+              className="rounded-md p-2 mt-1 mb-3 bg-zinc-800 focus:ring-2 focus:ring-violet-500 focus:outline-none w-full placeholder:text-sm"
+              placeholder="Enter your email"
+            />
+            <label htmlFor="password" className="text-sm text-zinc-200 pt-1">
+              Password
+            </label>
+            <input
+              type="password"
+              className="rounded-md p-2 mt-1 mb-3 bg-zinc-800 focus:ring-2 focus:ring-violet-500 focus:outline-none w-full placeholder:text-sm"
+              placeholder="Enter your password"
+            />
+            <button className="bg-gradient-to-b from-violet-700 to-purple-600 text-white rounded-md p-2 mt-3">
+              Login
+            </button>
+          </form>
+          <button className="bg-zinc-900 border border-zinc-700 font-mona px-6 text-white rounded-md py-3 mt-4 flex items-center justify-center w-full hover:bg-zinc-800 transition-all duration-200">
+            <div className="w-7 h-7 mr-1">
+              <GoogleIcon />
+            </div>
+            Sign in with Google
+          </button>
+        </div>
+      </div>
+      <div
+        className="lg:w-4/5 text-center rounded-3xl hidden lg:block lg:bg-gradient-to-br lg:from-violet-800 lg:via-violet-600 lg:to-violet-300 transition-all duration-300 h-full bg-cover bg-center"
+        style={{ backgroundImage: "url('/LoginBackground.jpg')" }}
+      ></div>
+    </section>
+  );
+};
+
+export default Login;
