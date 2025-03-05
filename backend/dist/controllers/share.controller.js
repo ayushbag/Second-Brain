@@ -63,8 +63,12 @@ const getContentsViaShareLink = (req, res) => __awaiter(void 0, void 0, void 0, 
             message: 'Content Not Found'
         });
     }
+    const user = yield model_1.UserModel.findOne({
+        userId: link.userId
+    });
     return res.status(200).json({
         message: 'Content found!',
+        user: user,
         content: content
     });
 });

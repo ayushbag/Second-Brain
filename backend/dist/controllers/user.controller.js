@@ -13,106 +13,155 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.handleLogin = exports.handleRegister = void 0;
-const zod_1 = require("zod");
 const model_1 = require("../model");
-const bcryptjs_1 = __importDefault(require("bcryptjs"));
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const firebaseAdmin_1 = __importDefault(require("../utils/firebaseAdmin"));
 dotenv_1.default.config();
 const handleRegister = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const requiredBody = zod_1.z.object({
-        username: zod_1.z.string().min(6, "Username should be minimum 6 characters"),
-        email: zod_1.z.string().email("Enter a Valid Email"),
-        password: zod_1.z
-            .string()
-            .min(8, "Password should be minimum 8 characters")
-            .max(20, "Should not exceed 20 characters"),
-    });
-    const parseBody = requiredBody.safeParse(req.body);
-    console.log(parseBody);
-    if (!parseBody.success) {
-        return res.status(411).json({
-            message: "validation error",
-            errors: parseBody.error.errors,
-        });
+    let username = req.body.username;
+    const idtoken = yield firebaseAdmin_1.default.auth().verifyIdToken(req.body.idtoken);
+    if (username === undefined) {
+        let index = idtoken.email.indexOf("@");
+        username = idtoken.email.substring(0, index);
     }
-    const { username, email, password } = parseBody.data;
-    try {
-        const user = yield model_1.UserModel.findOne({ email });
-        if (user !== null) {
-            return res.status(403).json({
-                message: "User Already Exists",
+    const userExists = yield model_1.UserModel.findOne({ firebaseUid: idtoken.uid });
+    if (userExists) {
+        return res.status(200).json({ message: "User already exists!" });
+    }
+    else {
+        try {
+            const newUser = new model_1.UserModel({
+                email: idtoken.email,
+                firebaseUid: idtoken.uid,
+                username: username
+            });
+            yield newUser.save().then(() => {
+                return res.status(200).json({
+                    message: "User Registered Successfully"
+                });
+            }).catch((error) => {
+                return res.status(403).json({ message: "error while register" });
             });
         }
-        const hashPassword = yield bcryptjs_1.default.hash(password, 12);
-        yield model_1.UserModel.create({
-            username,
-            email,
-            password: hashPassword,
-        });
-        res.status(200).json({
-            message: "Registered Successfully",
-        });
-    }
-    catch (error) {
-        res.status(500).json({
-            message: "Error While Register",
-        });
+        catch (error) {
+            return res.status(500).json({ message: "Internal Server Issue" });
+        }
     }
 });
 exports.handleRegister = handleRegister;
 const handleLogin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const requiredBody = zod_1.z.object({
-        username: zod_1.z.string().min(6, "Username should be minimum 6 characters"),
-        email: zod_1.z.string().email("Enter a Valid Email"),
-        password: zod_1.z
-            .string()
-            .min(8, "Password should be minimum 8 characters")
-            .max(20, "Should not exceed 20 characters"),
-    });
-    const parseBody = requiredBody.safeParse(req.body);
-    if (!parseBody.success) {
-        return res.status(411).json({
-            message: "validation error",
-            errors: parseBody.error.errors,
+    const idtoken = yield firebaseAdmin_1.default.auth().verifyIdToken(req.body.idtoken);
+    const userExists = yield model_1.UserModel.findOne({ firebaseUid: idtoken.uid, email: idtoken.email });
+    if (!userExists) {
+        return res.status(404).json({
+            message: "User doesn't exists"
         });
     }
-    const { username, password } = parseBody.data;
-    try {
-        const user = yield model_1.UserModel.findOne({ username });
-        if (!user) {
-            return res.status(403).json({
-                message: "User not Exists- Signup first",
-            });
-        }
-        const hashedPassword = user.password;
-        const comparePassword = yield bcryptjs_1.default.compare(password, hashedPassword);
-        if (comparePassword) {
-            try {
-                const token = jsonwebtoken_1.default.sign({ userId: user._id }, process.env.JWT_PASSWORD, { expiresIn: '1hr' });
-                return res.status(200).json({
-                    message: "Login Success",
-                    token: token,
-                });
-            }
-            catch (error) {
-                return res.status(411).json({
-                    message: "error while signin",
-                    error
-                });
-            }
-        }
-        else {
-            return res.status(500).json({
-                message: "Incorrect Password!"
-            });
-        }
-    }
-    catch (error) {
-        res.status(500).json({
-            message: "Internal Server Error",
-            error,
+    else {
+        return res.status(200).json({
+            message: "Logged in"
         });
     }
 });
 exports.handleLogin = handleLogin;
+// export const handleRegister = async (
+//   req: Request<{}, {}, User>,
+//   res: Response
+// ): Promise<any> => {
+//   const requiredBody = z.object({
+//     username: z.string().min(6, "Username should be minimum 6 characters") ,
+//     email: z.string().email("Enter a Valid Email"),
+//     password: z
+//       .string()
+//       .min(8, "Password should be minimum 8 characters")
+//       .max(20, "Should not exceed 20 characters"),
+//   });
+//   const parseBody = requiredBody.safeParse(req.body);
+//   console.log(parseBody);
+//   if (!parseBody.success) {
+//     return res.status(411).json({
+//       message: "validation error",
+//       errors: parseBody.error.errors,
+//     });
+//   }
+//   const { username, email, password } = parseBody.data;
+//   try {
+//     const user = await UserModel.findOne({ email });
+//     if (user !== null) {
+//       return res.status(403).json({
+//         message: "User Already Exists",
+//       });
+//     }
+//     const hashPassword = await bcryptjs.hash(password, 12);
+//     await UserModel.create({
+//       username,
+//       email,
+//       password: hashPassword,
+//     });
+//     res.status(200).json({
+//       message: "Registered Successfully",
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       message: "Error While Register",
+//     });
+//   }
+// };
+// export const handleLogin = async (
+//   req: Request<{}, {}, User>,
+//   res: Response
+// ): Promise<any> => {
+//   const requiredBody = z.object({
+//     username: z.string().min(6, "Username should be minimum 6 characters"),
+//     email: z.string().email("Enter a Valid Email"),
+//     password: z
+//       .string()
+//       .min(8, "Password should be minimum 8 characters")
+//       .max(20, "Should not exceed 20 characters"),
+//   });
+//   const parseBody = requiredBody.safeParse(req.body);
+//   if (!parseBody.success) {
+//     return res.status(411).json({
+//       message: "validation error",
+//       errors: parseBody.error.errors,
+//     });
+//   }
+//   const { username, password } = parseBody.data;
+//   try {
+//     const user = await UserModel.findOne({ username });
+//     if (!user) {
+//       return res.status(403).json({
+//         message: "User not Exists- Signup first",
+//       });
+//     }
+//     const hashedPassword = user.password;
+//     const comparePassword = await bcryptjs.compare(password, hashedPassword);
+//     if (comparePassword) {
+//       try {
+//         const token = jwt.sign(
+//           {userId: user._id},
+//           process.env.JWT_PASSWORD as string,
+//           { expiresIn: '1hr' }
+//         );
+//         return res.status(200).json({
+//           message: "Login Success",
+//           token: token,
+//         });
+//       } catch (error: any) {
+//         return res.status(411).json({
+//             message: "error while signin",
+//             error
+//         })
+//       }
+//     } else {
+//         return res.status(500).json({
+//             message: "Incorrect Password!"
+//         })
+//     }
+//   } catch (error: any) {
+//     res.status(500).json({
+//       message: "Internal Server Error",
+//       error,
+//     });
+//   }
+// };

@@ -20,7 +20,7 @@ app.use((0, cors_1.default)());
 (0, db_1.connectDB)();
 app.use("/user", user_routes_1.userRouter);
 app.use("/content", authMiddleware_1.authMiddleware, content_route_1.contentRouter);
-app.use("/brain", authMiddleware_1.authMiddleware, shareBrain_route_1.brainShareRouter);
+app.use("/brain", shareBrain_route_1.brainShareRouter);
 app.use("/tags", authMiddleware_1.authMiddleware, tags_routes_1.tagsRouter);
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Running on port ${PORT}`));

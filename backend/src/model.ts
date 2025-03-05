@@ -11,13 +11,15 @@ const userSchema = new Schema({
         required: true,
         unique: true        
     },
-    password: {
+    firebaseUid: {
         type: String,
         required: true
+    }},{
+        timestamps: true
     }
-})
+)
 
-const contentTypes = ['image', 'video', 'audio', 'article']
+const contentTypes = ['youtube', 'document', 'twitter', 'otherlink']
 
 const contentSchema = new Schema({
     link: { type: String, required: true },

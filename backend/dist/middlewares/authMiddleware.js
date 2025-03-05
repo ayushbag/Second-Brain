@@ -13,30 +13,35 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authMiddleware = void 0;
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const firebaseAdmin_1 = __importDefault(require("../utils/firebaseAdmin"));
 const authMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
-    if (!token) {
+    const token = req.headers.authorization || req.headers.Authorization;
+    if (typeof token !== "string" || !(token === null || token === void 0 ? void 0 : token.startsWith("Bearer "))) {
         return res.status(401).json({
-            message: 'Token not found!'
+            message: "token not found"
         });
     }
-    jsonwebtoken_1.default.verify(token, process.env.JWT_PASSWORD || 'string', (err, decoded) => {
-        if (err) {
-            return res.status(403).json({
-                message: "token Invalid"
+    else {
+        try {
+            const authToken = token.split(" ")[1];
+            let checkedRevoked = true;
+            yield firebaseAdmin_1.default.auth().verifyIdToken(authToken, checkedRevoked)
+                .then((payload) => {
+                req.uid = payload.uid;
+                next();
+            })
+                .catch((error) => {
+                console.log(error);
+                return res.status(402).json({
+                    message: "Unauthorized"
+                });
             });
         }
-        if (!decoded.userId) {
-            return res.status(400).json({
-                message: "Invalid token structure!"
+        catch (error) {
+            return res.status(500).json({
+                message: "Unauthorized"
             });
         }
-        // console.log(decoded);
-        req.userId = decoded.userId;
-        next();
-    });
+    }
 });
 exports.authMiddleware = authMiddleware;
-// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzdkNjMxOTM3NGZiN2M3OTllZTVkMTEiLCJpYXQiOjE3MzYyNzA2MjgsImV4cCI6MTczNjI3NDIyOH0.1C4MIUJLBKjCUI-sgL1UTpRURzioM_K-1frl5OJ1tcQ

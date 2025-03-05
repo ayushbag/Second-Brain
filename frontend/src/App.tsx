@@ -4,6 +4,8 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Landing from './pages/Landing';
 import CardContent from './pages/CardContent';
+import Test from './pages/Test';
+import { ToastContainer } from 'react-toastify';
 
 function App() {
   return (
@@ -15,8 +17,10 @@ function App() {
           <Route path='/login' element={<Login />}/>  
           <Route path='/register' element={<Register />}/>  
           <Route path='/contents' element={<CardContent />}/>  
+          <Route path='/test' element={<Test />} />
         </Route>
       </Routes>
+      <ToastContainer theme='dark'/>
     </>
   );
 }

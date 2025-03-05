@@ -13,12 +13,14 @@ const userSchema = new mongoose_1.Schema({
         required: true,
         unique: true
     },
-    password: {
+    firebaseUid: {
         type: String,
         required: true
     }
+}, {
+    timestamps: true
 });
-const contentTypes = ['image', 'video', 'audio', 'article'];
+const contentTypes = ['youtube', 'document', 'twitter', 'short_note', 'link'];
 const contentSchema = new mongoose_1.Schema({
     link: { type: String, required: true },
     type: { type: String, enum: contentTypes, required: true },
