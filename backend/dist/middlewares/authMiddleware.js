@@ -16,6 +16,7 @@ exports.authMiddleware = void 0;
 const firebaseAdmin_1 = __importDefault(require("../utils/firebaseAdmin"));
 const authMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const token = req.headers.authorization || req.headers.Authorization;
+    console.log(token);
     if (typeof token !== "string" || !(token === null || token === void 0 ? void 0 : token.startsWith("Bearer "))) {
         return res.status(401).json({
             message: "token not found"

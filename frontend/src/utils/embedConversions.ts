@@ -14,12 +14,13 @@ export function generateIframeMarkup(url: string): string | null {
 }
 
 export function twitterTweet(url: string) {
-    if (url.search("x")) {
-        const link = url.replace('x', 'twitter')
-        return link
-    } else if (url.search('twitter')) {
-        return url
+    const cleanUrl = url.split('?')[0];
+    if (cleanUrl.includes("x")) {
+        const link = cleanUrl.replace('x', 'twitter');
+        return link;
+    } else if (cleanUrl.includes('twitter')) {
+        return cleanUrl;
     } else {
-        return "Invalid Link"
+        return "Invalid Link";
     }
 }

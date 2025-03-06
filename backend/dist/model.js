@@ -20,13 +20,15 @@ const userSchema = new mongoose_1.Schema({
 }, {
     timestamps: true
 });
-const contentTypes = ['youtube', 'document', 'twitter', 'short_note', 'link'];
+const contentTypes = ['youtube', 'document', 'twitter', 'otherlink'];
 const contentSchema = new mongoose_1.Schema({
     link: { type: String, required: true },
     type: { type: String, enum: contentTypes, required: true },
     title: { type: String, required: true },
     tags: [{ type: mongoose_1.Types.ObjectId, ref: 'Tags' }],
     userId: { type: mongoose_1.Types.ObjectId, ref: 'User', required: true }
+}, {
+    timestamps: true
 });
 const tagsSchema = new mongoose_1.Schema({
     title: { type: String, required: true },

@@ -17,13 +17,14 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 interface Card {
   text: string;
   tags: string[];
-  type: "twitter" | "document" | "youtube" | "short_note" | "link";
+  type: "twitter" | "document" | "youtube" | "short_note" | "otherlink";
   link?: string;
   shortNote?: string;
   contentId: any;
+  date: any
 }
 
-const Card = ({ text, tags, type, link, shortNote, contentId }: Card) => {
+const Card = ({ text, tags, type, link, shortNote, contentId, date }: Card) => {
   // "https://x.com/mannupaaji/status/1833878491470713108"
   const twitterLink: string | undefined = link && twitterTweet(link);
 
@@ -45,8 +46,6 @@ const Card = ({ text, tags, type, link, shortNote, contentId }: Card) => {
         }
       );
       return res;
-      // await queryClient.invalidateQueries({ queryKey: ["content"], exact: true });
-      // await queryClient.refetchQueries({ queryKey: ["content"], exact: true });
     } catch (error) {
       console.log(error);
     }
@@ -90,7 +89,7 @@ const Card = ({ text, tags, type, link, shortNote, contentId }: Card) => {
                   <Folder size="22" />
                 </div>
               )}
-              {type === "link" && (
+              {type === "otherlink" && (
                 <div className="document icon text-zinc-400">
                   <Link size="22" />
                 </div>
@@ -129,13 +128,22 @@ const Card = ({ text, tags, type, link, shortNote, contentId }: Card) => {
             </div>
           )}
 
-          {/* twitter */}
+          {/* twitter
           {type === "twitter" && (
             <div className="twitter-embed bg-zinc-50 rounded-md h-40 max-w-64 overflow-hidden">
               <blockquote className="twitter-tweet">
                 <a href={twitterLink}></a>
               </blockquote>
             </div>
+          )} */}
+
+          {/* twitter */}
+          {type === "twitter" && (
+            <a href={link} target="_blank">
+            <div className="default bg-zinc-900 rounded-md flex justify-center items-center text-zinc-400 overflow-hidden w-full h-40">
+              <Twitter size="50" />
+            </div>
+          </a>
           )}
 
           {/* document */}
@@ -148,7 +156,7 @@ const Card = ({ text, tags, type, link, shortNote, contentId }: Card) => {
           )}
 
           {/* link */}
-          {type === "link" && link && (
+          {type === "otherlink" && link && (
             <a href={link} target="_blank">
               <div className="default bg-zinc-900 rounded-md flex justify-center items-center text-zinc-400 overflow-hidden w-full h-40">
                 <Link size="50" />
@@ -182,7 +190,12 @@ const Card = ({ text, tags, type, link, shortNote, contentId }: Card) => {
         </div>
         <div className="date flex items-center gap-1 text-zinc-400 pl-1 pt-2">
           <Calendar size="12" />
-          <span className="text-sm">January 15, 2025</span>
+          <span className="text-sm">{new Date(date).toLocaleDateString("en-US", {
+            weekday: "short",
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          })}</span>
         </div>
       </div>
     </div>

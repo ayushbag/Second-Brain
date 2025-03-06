@@ -73,10 +73,10 @@ const getContent = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             select: 'title',
             transform: (doc) => doc.title
         });
-        console.log(content);
         if (!content || content.length === 0) {
             return res.status(403).json({
-                message: 'Content not found!'
+                message: 'Content not found!',
+                content: []
             });
         }
         return res.status(200).json({
@@ -102,7 +102,7 @@ const deleteContent = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         }
         const content = yield model_1.ContentModel.findOne({ _id: contentId, userId: user._id });
         if (!content) {
-            return res.status(403).json({
+            return res.status(404).json({
                 message: "Content not exists"
             });
         }

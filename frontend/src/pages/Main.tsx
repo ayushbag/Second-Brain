@@ -105,6 +105,7 @@ const Main = () => {
                         link={item.link}
                         shortNote={item?.shortNote}
                         contentId={item._id}
+                        date={item.createdAt}
                       />
                     </div>
                   )): 

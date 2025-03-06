@@ -27,6 +27,8 @@ const contentSchema = new Schema({
     title: { type: String, required: true },
     tags: [{ type: Types.ObjectId, ref: 'Tags' }],
     userId: { type: Types.ObjectId, ref: 'User', required: true }
+},{
+    timestamps: true
 })
 
 const tagsSchema = new Schema({
