@@ -2,9 +2,10 @@ import { Link2, Menu, Plus } from "lucide-react"
 import Logo from '../icons/MainLogo'
 import Button from "./Button"
 
-const Navbar = ({ toggleFunction, toggleModal } : {
+const Navbar = ({ toggleFunction, toggleAddContentModal, toggleShareBrain } : {
   toggleFunction: (value: boolean) => void ,
-  toggleModal: (value: boolean) => void ,
+  toggleAddContentModal: (value: boolean) => void ,
+  toggleShareBrain: (value: boolean) => void ,
 }) => {
 
   return (
@@ -19,7 +20,7 @@ const Navbar = ({ toggleFunction, toggleModal } : {
             <Logo size='30' color="#7c3aed"/>
         </div>
         <div className="text-center flex items-center lg:hidden justify-between gap-1">
-            <Button onClick={() => toggleModal(true)} intent="primary" startIcon={<Plus size="20" />}  size="small"/>
+            <Button onClick={() => toggleAddContentModal(true)} intent="primary" startIcon={<Plus size="20" />}  size="small"/>
             <Button intent="secondary" startIcon={<Link2 size="20" />} size="small"/>
         </div>
 
@@ -28,8 +29,8 @@ const Navbar = ({ toggleFunction, toggleModal } : {
             All Notes
         </div>
         <div className="hidden text-center lg:flex items-center justify-between gap-1">
-            <Button onClick={() => toggleModal(true)} intent="primary" startIcon={<Plus size="20" />} size="medium">&nbsp;Add Contents</Button>
-            <Button intent="secondary" startIcon={<Link2 size="20" />} size="medium">&nbsp;Share Brain</Button>
+            <Button onClick={() => toggleAddContentModal(true)} intent="primary" startIcon={<Plus size="20" />} size="medium">&nbsp;Add Contents</Button>
+            <Button onClick={() => toggleShareBrain(true)} intent="secondary" startIcon={<Link2 size="20" />} size="medium">&nbsp;Share Brain</Button>
         </div>
     </div>
   )

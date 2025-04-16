@@ -63,6 +63,8 @@ const Card = ({ text, tags, type, link, shortNote, contentId, date }: Card) => {
     },
   });
 
+  console.log("Type is: "+type)
+
   return (
     <div className="main text-white font-mona bg-zinc-800 flex-wrap min-w-72 h-80 md:h-full rounded-md shadow-md p-4 border border-zinc-600">
       <div className="content flex flex-col gap-2">

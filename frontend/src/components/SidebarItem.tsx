@@ -25,12 +25,12 @@ const SidebarItem = ({
       icon: <YoutubeIcon size="22"/>
     },
     {
-      type: "documents",
+      type: "document",
       title: "documents",
       icon: <NotepadText size="19"/>
     },
     {
-      type: "links",
+      type: "otherlink",
       title: "links",
       icon: <Link size="20"/>
     }

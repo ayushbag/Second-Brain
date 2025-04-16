@@ -8,6 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import ContentSkeleton from "../components/ContentSkeleton";
 import AddContentModal from "../components/AddContentModal";
 import { getAuth } from "firebase/auth";
+import ShareModal from "../components/ShareModal";
 
 const getContent = async () => {
   let token: string | null = null;
@@ -34,7 +35,6 @@ const getContent = async () => {
   }
 };
 
-
 const handleFilter = (data: any, type: ContentTypes) => {
   if (data === undefined) {
     return undefined;
@@ -48,11 +48,12 @@ const handleFilter = (data: any, type: ContentTypes) => {
   }
 }
 
-export type ContentTypes = "all" | "twitter" | "youtube" | "documents" | "links";
+export type ContentTypes = "all" | "twitter" | "youtube" | "document" | "links";
 
 const Main = () => {
-  const [toggleSidebar, setToggleSidebar] = useState(false);
-  const [addContentModal, setAddContentModal] = useState(false)
+  const [toggleSidebar, setToggleSidebar] = useState<boolean>(false);
+  const [addContentModal, setAddContentModal] = useState<boolean>(false)
+  const [toggleShareBrainModal, setToggleShareBrainModal] = useState<boolean>(false)
 
   const [filterContents, setFilterContents] = useState<ContentTypes>("all")
 
@@ -73,6 +74,13 @@ const Main = () => {
             </div>
           )
         }
+        {
+          toggleShareBrainModal && (
+            <div className="z-50">
+              <ShareModal toggleShareBrainModal={setToggleShareBrainModal} />
+            </div>
+          )
+        }
         {toggleSidebar && (
           <div className="sidebar fixed top-0 lg:hidden z-10">
             <Sidebar toggleFunction={setToggleSidebar} />
@@ -84,7 +92,7 @@ const Main = () => {
           </div>
           <div className="lg:w-full lg:pt-3">
             <div className="sticky top-0 z-0">
-              <Navbar toggleModal={setAddContentModal} toggleFunction={setToggleSidebar} />
+              <Navbar toggleAddContentModal={setAddContentModal} toggleFunction={setToggleSidebar} toggleShareBrain={setToggleShareBrainModal}/>
             </div>
             <div className="px-6">
               <div>
@@ -112,7 +120,6 @@ const Main = () => {
                   <div className="w-full text-zinc-400">No Contents found</div>
                 }
               </div>
-              <div></div>
             </div>
           </div>
         </div>
