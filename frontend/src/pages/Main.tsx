@@ -8,7 +8,11 @@ import { useQuery } from "@tanstack/react-query";
 import ContentSkeleton from "../components/ContentSkeleton";
 import AddContentModal from "../components/AddContentModal";
 import { getAuth } from "firebase/auth";
-import ShareModal from "../components/ShareModal";
+import AiInputBox from "../components/AiInputBox";
+import background from "../assets/background.svg"
+import LinkPreviewer from "../components/LinkPreviewer";
+import LinePattern from "../assets/linepattern.svg"
+
 
 const getContent = async () => {
   let token: string | null = null;
@@ -51,7 +55,6 @@ const handleFilter = (data: any, type: ContentTypes) => {
 export type ContentTypes = "all" | "twitter" | "youtube" | "document" | "links";
 
 const Main = () => {
-  const [toggleSidebar, setToggleSidebar] = useState<boolean>(false);
   const [addContentModal, setAddContentModal] = useState<boolean>(false)
   const [toggleShareBrainModal, setToggleShareBrainModal] = useState<boolean>(false)
 
@@ -66,64 +69,41 @@ const Main = () => {
 
   return (
     <>
-      <div className="main max-w-7xl mx-auto text-white flex flex-col lg:flex-row relative bg-zinc-950 min-h-screen">
+      <div className="z-50 main max-w-7xl mx-auto text-white ">
+      <div className="flex z-50 flex-col relative min-h-screen">
+        {/*Content Modal */}
         {
-          addContentModal && (
-            <div className="z-50">
-              <AddContentModal toggleModal={setAddContentModal} />
-            </div>
-          )
+        addContentModal &&
+        <AddContentModal toggleModal={() => setAddContentModal((prev) => !prev)} />
         }
-        {
-          toggleShareBrainModal && (
-            <div className="z-50">
-              <ShareModal toggleShareBrainModal={setToggleShareBrainModal} />
-            </div>
-          )
-        }
-        {toggleSidebar && (
-          <div className="sidebar fixed top-0 lg:hidden z-10">
-            <Sidebar toggleFunction={setToggleSidebar} />
-          </div>
-        )}
-        <div className="lg:flex lg:w-full font-mona">
-          <div className="hidden lg:block lg:w-1/4 h-screen bg-zinc-900/60 lg:sticky lg:top-0">
-            <SidebarLarge activated={filterContents} setFilterContent={setFilterContents} />
-          </div>
-          <div className="lg:w-full lg:pt-3">
-            <div className="sticky top-0 z-0">
-              <Navbar toggleAddContentModal={setAddContentModal} toggleFunction={setToggleSidebar} toggleShareBrain={setToggleShareBrainModal}/>
-            </div>
-            <div className="px-6">
-              <div>
-                <h1 className="text-xl p-3 font-mona text-zinc-200 lg:hidden">
-                  All Notes
-                </h1>
-              </div>
-              <div className="md:px-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-4 items-center justify-items-center">
-                { isFetching ? 
-                  <ContentSkeleton /> :
-                  data ?
-                  filteredData.map((item: any) => (
-                    <div key={item._id}>
-                      <Card
-                        text={item.title}
-                        tags={item.tags}
-                        type={item.type}
-                        link={item.link}
-                        shortNote={item?.shortNote}
-                        contentId={item._id}
-                        date={item.createdAt}
-                      />
-                    </div>
-                  )): 
-                  <div className="w-full text-zinc-400">No Contents found</div>
-                }
-              </div>
-            </div>
-          </div>
+
+        {/* Navbar */}
+        <Navbar addContentModal={() => setAddContentModal((prev) => !prev)} />
+
+        {/* Background Text */}
+        <div className="absolute font-dmSans inset-0 z-0 flex items-center justify-center pointer-events-none -translate-y-14">
+        <h1 className="parent text-4xl sm:text-6xl font-bold bg-gradient-to-b from-white via-white to-zinc-800 bg-clip-text text-transparent text-center">
+          Hello, Pinaka
+          {/* <span className="inline text-black">{'🚀'}</span> */}
+        </h1>
+        </div>
+
+        {/* AI Input box */}
+        <div className="z-10 flex flex-grow items-center justify-center">
+        <AiInputBox />
         </div>
       </div>
+      
+      {/* Memories */}
+      <div>
+        <div>Start from here..</div>
+      </div>
+      </div>
+      {/* Background Image */}
+      <div
+        className="absolute inset-0 z-0 bg-cover bg-center mix-blend-soft-light"
+        style={{ backgroundImage: `url(${LinePattern})` }}
+      />
     </>
   );
 };
