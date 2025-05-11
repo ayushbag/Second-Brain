@@ -8,6 +8,7 @@ import { contentRouter } from "./routes/content.route"
 import { authMiddleware } from "./middlewares/authMiddleware"
 import { brainShareRouter } from "./routes/shareBrain.route"
 import { tagsRouter } from "./routes/tags.routes"
+import { linkPreview } from "./routes/linkPreview.route"
 
 const app = express()
 
@@ -21,6 +22,7 @@ app.use("/user", userRouter);
 app.use("/content", authMiddleware, contentRouter)
 app.use("/brain", brainShareRouter)
 app.use("/tags", authMiddleware, tagsRouter)
+app.use("/link-preview", linkPreview)
 
 const PORT = process.env.PORT || 5000
 app.listen(PORT, () => console.log(`Running on port ${PORT}`))
