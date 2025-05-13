@@ -68,6 +68,8 @@ const Main = () => {
 
   const filteredData = handleFilter(data, filterContents);
 
+  console.log(data)
+
   return (
     <>
       <div className="z-50 main max-w-7xl mx-auto text-white ">
@@ -96,15 +98,12 @@ const Main = () => {
         </div>
 
         {/* Memories */}
-        <div className="max-w-5xl mx-auto py-12 font-mona flex flex-col gap-10">
+        <div className="max-w-3xl sm:max-w-4xl mx-auto py-12 font-mona flex flex-col gap-10 items-center sm:items-start">
           <div className="text-zinc-400 text-3xl font-semibold px-5">Your Memories</div>
           <Mansory>
-            <img className="rounded-md" src="https://images.unsplash.com/photo-1744029829181-ad19c2ee248b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxfHx8ZW58MHx8fHx8" alt="" />
-            <img className="rounded-md" src="https://plus.unsplash.com/premium_photo-1747054588576-f6bd489758f0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyfHx8ZW58MHx8fHx8" alt="" />
-            <img className="rounded-md" src="https://images.unsplash.com/photo-1744042417269-4837ea044843?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwzfHx8ZW58MHx8fHx8" alt="" />
-            <img className="rounded-md" src="https://images.unsplash.com/photo-1744148070187-b3815f7a9dbc?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw1fHx8ZW58MHx8fHx8" alt="" />
-            <img className="rounded-md" src="https://plus.unsplash.com/premium_photo-1746731481770-08b2f71661d0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw2fHx8ZW58MHx8fHx8" alt="" />
-            <img className="rounded-md" src="https://images.unsplash.com/photo-1744132813623-5ce3c521eef4?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw0fHx8ZW58MHx8fHx8" alt="" />
+            {filteredData && filteredData.map((content: any) => (
+              <Card link={content.link} type={content.type}/>
+            ))}
           </Mansory>
         </div>
       </div>

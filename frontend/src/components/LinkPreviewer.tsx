@@ -1,8 +1,11 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
+import YouTube from 'react-youtube';
+import { getId } from "../utils/embedConversions";
 
-interface LinkPreviewerProps{
-    url: string
+interface LinkPreviewerProps {
+  url: string,
+  type?: string  
 }
 
 interface LinkPreviewData {
@@ -11,19 +14,19 @@ interface LinkPreviewData {
   description: string;
 }
 
-const LinkPreviewer = ({ url }: LinkPreviewerProps) => {
+const LinkPreviewer = ({ url, type }: LinkPreviewerProps) => {
 
   const [data, setData] = useState<LinkPreviewData | null>(null)
 
   useEffect(() => {
     const fetchLinkPreview = async () => {
       try {
-      const response = await axios.post("http://localhost:3000/link-preview", { url });
-      const previewData = response.data.data;
-      console.log(previewData);
-      setData(previewData);
+        const response = await axios.post("http://localhost:3000/link-preview", { url });
+        const previewData = response.data.data;
+        console.log(previewData);
+        setData(previewData);
       } catch (error) {
-      console.error(error);
+        console.error(error);
       }
     };
 
@@ -31,28 +34,42 @@ const LinkPreviewer = ({ url }: LinkPreviewerProps) => {
     console.log("Data: ", data)
   }, [url])
 
+  console.log(data);
+  
+
   return (
     <div>
-    <a
-      href={url}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="w-64 h-64+[20px] flex flex-col backdrop-blur-md rounded-xl overflow-hidden bg-zinc-900/50 border border-zinc-700 shadow-sm hover:shadow-black hover:scale-[1.01] transition-all duration-300"
-    >
-      <img
-      src={data?.image}
-      alt="Link Preview"
-      className="w-full h-36 object-cover"
-      />
-      <div className="p-3 flex-1 flex flex-col">
-      <h3 className="truncate text-base font-semibold text-white mb-1 font-mona">
-        {data?.title}
-      </h3>
-      <p className="text-sm text-ellipsis text-zinc-400 leading-relaxed line-clamp-3 font-dmSans">
-        {data?.description}
-      </p>
-      </div>
-    </a>
+      <a
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="w-64 h-64+[20px] flex flex-col backdrop-blur-md rounded-xl overflow-hidden bg-zinc-900/50 border border-zinc-700 shadow-sm hover:shadow-black hover:scale-[1.01] transition-all duration-300"
+      >
+        <div className="w-full h-36 object-cover">
+          {type === "youtube" ?
+            <YouTube 
+              videoId={getId(url)} 
+              opts={{
+                height: '144',
+                width: '256',                
+              }}
+            />
+          :
+            <img 
+              src={data?.image}
+              title={data?.title}
+            />
+          } 
+        </div>
+        <div className="p-3 flex-1 flex flex-col">
+          <h3 className="truncate text-base font-semibold text-white mb-1 font-mona">
+            {data?.title}
+          </h3>
+          <p className="text-sm text-ellipsis text-zinc-400 leading-relaxed line-clamp-3 font-dmSans">
+            {data?.description}
+          </p>
+        </div>
+      </a>
     </div>
   )
 }
