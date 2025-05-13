@@ -12,6 +12,7 @@ import AiInputBox from "../components/AiInputBox";
 import background from "../assets/background.svg"
 import LinkPreviewer from "../components/LinkPreviewer";
 import LinePattern from "../assets/linepattern.svg"
+import Mansory from "../components/Mansory";
 
 
 const getContent = async () => {
@@ -70,34 +71,42 @@ const Main = () => {
   return (
     <>
       <div className="z-50 main max-w-7xl mx-auto text-white ">
-      <div className="flex z-50 flex-col relative min-h-screen">
-        {/*Content Modal */}
-        {
-        addContentModal &&
-        <AddContentModal toggleModal={() => setAddContentModal((prev) => !prev)} />
-        }
+        <div className="flex z-50 flex-col relative min-h-screen">
+          {/*Content Modal */}
+          {
+            addContentModal &&
+            <AddContentModal toggleModal={() => setAddContentModal((prev) => !prev)} />
+          }
 
-        {/* Navbar */}
-        <Navbar addContentModal={() => setAddContentModal((prev) => !prev)} />
+          {/* Navbar */}
+          <Navbar addContentModal={() => setAddContentModal((prev) => !prev)} />
 
-        {/* Background Text */}
-        <div className="absolute font-dmSans inset-0 z-0 flex items-center justify-center pointer-events-none -translate-y-14">
-        <h1 className="parent text-4xl sm:text-6xl font-bold bg-gradient-to-b from-white via-white to-zinc-800 bg-clip-text text-transparent text-center">
-          Hello, Pinaka
-          {/* <span className="inline text-black">{'🚀'}</span> */}
-        </h1>
+          {/* Background Text */}
+          <div className="absolute font-dmSans inset-0 z-0 flex items-center justify-center pointer-events-none -translate-y-16">
+            <h1 className="parent text-4xl sm:text-6xl font-bold bg-gradient-to-b from-white via-white to-zinc-600 bg-clip-text text-transparent text-center">
+              Hello, Pinaka
+              {/* <span className="inline text-black">{'🚀'}</span> */}
+            </h1>
+          </div>
+
+          {/* AI Input box */}
+          <div className="z-10 flex flex-grow items-center justify-center">
+            <AiInputBox />
+          </div>
         </div>
 
-        {/* AI Input box */}
-        <div className="z-10 flex flex-grow items-center justify-center">
-        <AiInputBox />
+        {/* Memories */}
+        <div className="max-w-5xl mx-auto py-12 font-mona flex flex-col gap-10">
+          <div className="text-zinc-400 text-3xl font-semibold px-5">Your Memories</div>
+          <Mansory>
+            <img className="rounded-md" src="https://images.unsplash.com/photo-1744029829181-ad19c2ee248b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxfHx8ZW58MHx8fHx8" alt="" />
+            <img className="rounded-md" src="https://plus.unsplash.com/premium_photo-1747054588576-f6bd489758f0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyfHx8ZW58MHx8fHx8" alt="" />
+            <img className="rounded-md" src="https://images.unsplash.com/photo-1744042417269-4837ea044843?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwzfHx8ZW58MHx8fHx8" alt="" />
+            <img className="rounded-md" src="https://images.unsplash.com/photo-1744148070187-b3815f7a9dbc?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw1fHx8ZW58MHx8fHx8" alt="" />
+            <img className="rounded-md" src="https://plus.unsplash.com/premium_photo-1746731481770-08b2f71661d0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw2fHx8ZW58MHx8fHx8" alt="" />
+            <img className="rounded-md" src="https://images.unsplash.com/photo-1744132813623-5ce3c521eef4?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw0fHx8ZW58MHx8fHx8" alt="" />
+          </Mansory>
         </div>
-      </div>
-      
-      {/* Memories */}
-      <div>
-        <div>Start from here..</div>
-      </div>
       </div>
       {/* Background Image */}
       <div
