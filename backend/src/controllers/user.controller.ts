@@ -28,8 +28,10 @@ export const handleRegister = async (req: Request<{},{},{ idtoken:string,usernam
         })
 
         await newUser.save().then(()=> {
+            const email = newUser.email.substring(0, newUser.email.indexOf("@"));
             return res.status(200).json({
-                message: "User Registered Successfully"
+                message: "User Registered Successfully",
+                user: email
             })
         }).catch((error) => {
             return res.status(403).json({ message: "error while register" })
@@ -48,8 +50,10 @@ export const handleLogin = async (req: Request<{},{},{idtoken:string}>, res: Res
             message: "User doesn't exists"
         })
     } else {
+        const email = userExists.email.substring(0, userExists.email.indexOf("@"));
         return res.status(200).json({
-            message: "Logged in"
+            message: "Logged in",
+            user: email
         })
     }
 }

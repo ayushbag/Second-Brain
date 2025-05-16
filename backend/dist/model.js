@@ -20,7 +20,7 @@ const userSchema = new mongoose_1.Schema({
 }, {
     timestamps: true
 });
-const contentTypes = ['youtube', 'document', 'twitter', 'otherlink'];
+const contentTypes = ['youtube', 'twitter', 'link'];
 const contentSchema = new mongoose_1.Schema({
     link: { type: String, required: true },
     type: { type: String, enum: contentTypes, required: true },

@@ -19,7 +19,7 @@ const userSchema = new Schema({
     }
 )
 
-const contentTypes = ['youtube', 'document', 'twitter', 'otherlink']
+const contentTypes = ['youtube', 'twitter', 'link']
 
 const contentSchema = new Schema({
     link: { type: String, required: true },

@@ -55,10 +55,13 @@ const LinkPreviewer = ({ url, type }: LinkPreviewerProps) => {
               }}
             />
           :
-            <img 
-              src={data?.image}
-              title={data?.title}
-            />
+            <div className="w-64 max-h-36 overflow-clip">
+              {/* # Add if there is no img case!! */}
+              <img 
+                src={data?.image}
+                title={data?.title}
+              />
+            </div>
           } 
         </div>
         <div className="p-3 flex-1 flex flex-col">

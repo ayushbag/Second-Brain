@@ -17,7 +17,7 @@ const ShareModal = ({ toggleShareBrainModal }: {
   toggleShareBrainModal: (s: boolean) => void
 }) => {
   return (
-    <div className="fixed inset-0 bg-zinc-950/70 flex items-center justify-center h-screen w-screen">
+    <div className="fixed z-50 inset-0 bg-zinc-950/70 flex items-center justify-center h-screen w-screen">
       <div className="bg-zinc-900 p-4 sm:p-6 md:p-8 rounded-lg shadow-lg w-full max-w-md font-mona relative">
       <button onClick={() => toggleShareBrainModal(false)} className="absolute top-2 right-2 text-white px-2" aria-label="Close">
         &times;

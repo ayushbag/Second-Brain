@@ -19,14 +19,8 @@ export function generateIframeMarkup(url: string): string | null {
     return null;
 }
 
-export function twitterTweet(url: string) {
-    const cleanUrl = url.split('?')[0];
-    if (cleanUrl.includes("x")) {
-        const link = cleanUrl.replace('x', 'twitter');
-        return link;
-    } else if (cleanUrl.includes('twitter')) {
-        return cleanUrl;
-    } else {
-        return "Invalid Link";
-    }
+export function twitterTweetId(url: string): string {
+    // Match the tweet ID from URLs like https://x.com/user/status/1234567890 or https://twitter.com/user/status/1234567890
+    const match = url.match(/status\/(\d+)/);
+    return (match && match[1]) ? match[1] : "";
 }

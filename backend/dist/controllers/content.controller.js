@@ -9,10 +9,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteContent = exports.getContent = exports.createContent = void 0;
+exports.deleteContent = exports.getContent = exports.createContent = exports.typeOfContent = void 0;
 const model_1 = require("../model");
+const typeOfContent = (link) => {
+    if (link.includes("youtube") || link.includes("youtu.be")) {
+        return "youtube";
+    }
+    else if (link.includes("x.com") || link.includes("twitter.com")) {
+        return "twitter";
+    }
+    else {
+        return "link";
+    }
+};
+exports.typeOfContent = typeOfContent;
 const createContent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { link, type, title, tags } = req.body;
+    const { link, title, tags } = req.body;
     const firebaseUid = req.uid;
     if (!firebaseUid) {
         return res.status(403).json({
@@ -24,6 +36,7 @@ const createContent = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         if (!user) {
             return res.status(404).json({ message: "User not found in the database" });
         }
+        const type = (0, exports.typeOfContent)(link);
         const tagArray = typeof tags === 'string' ? tags.split(",").map(tag => tag.trim()) : tags;
         const content = yield model_1.ContentModel.create({
             link,

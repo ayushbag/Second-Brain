@@ -13,6 +13,7 @@ import background from "../assets/background.svg"
 import LinkPreviewer from "../components/LinkPreviewer";
 import LinePattern from "../assets/linepattern.svg"
 import Mansory from "../components/Mansory";
+import ShareModal from "../components/ShareModal";
 
 
 const getContent = async () => {
@@ -80,8 +81,22 @@ const Main = () => {
             <AddContentModal toggleModal={() => setAddContentModal((prev) => !prev)} />
           }
 
+          {/* ShareBrainModal */}
+          {
+            toggleShareBrainModal &&
+            <ShareModal toggleShareBrainModal={() => setToggleShareBrainModal((prev) => !prev)} />
+          }
+
+          {/* Scroll Down Text for Memories */}
+          <div className="absolute font-mona left-1/2 bottom-4 sm:bottom-2 transform -translate-x-1/2 z-40 flex flex-col items-center pointer-events-none w-full px-2">
+            <span className="text-zinc-300 text-sm sm:text-base font-medium text-center">Scroll down for memories</span>
+            <svg className="w-5 h-5 sm:w-6 sm:h-6 mt-1 text-zinc-300" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+
           {/* Navbar */}
-          <Navbar addContentModal={() => setAddContentModal((prev) => !prev)} />
+          <Navbar addContentModal={() => setAddContentModal((prev) => !prev)} shareBrainModal={() => setToggleShareBrainModal((prev) => !prev)}/>
 
           {/* Background Text */}
           <div className="absolute font-dmSans inset-0 z-0 flex items-center justify-center pointer-events-none -translate-y-16">
@@ -100,11 +115,13 @@ const Main = () => {
         {/* Memories */}
         <div className="max-w-3xl sm:max-w-4xl mx-auto py-12 font-mona flex flex-col gap-10 items-center sm:items-start">
           <div className="text-zinc-400 text-3xl font-semibold px-5">Your Memories</div>
-          <Mansory>
-            {filteredData && filteredData.map((content: any) => (
-              <Card link={content.link} type={content.type}/>
-            ))}
-          </Mansory>
+          <div className="w-full">
+            <Mansory>
+              {filteredData && filteredData.map((content: any) => (
+                <Card key={content.id} link={content.link} type={content.type} />
+              ))}
+            </Mansory>
+          </div>
         </div>
       </div>
       {/* Background Image */}

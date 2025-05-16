@@ -10,7 +10,6 @@ const AddContentModal = ({ toggleModal }: {
 }) => {
 
     const [title, setTitle] = useState<string>("")
-    const [type, setType] = useState<string>("document")
     const [link, setLink] = useState<string>("")
     const [tags, setTags] = useState<string>("")
 
@@ -18,7 +17,6 @@ const AddContentModal = ({ toggleModal }: {
 
     const contentSchema = z.object({
         title: z.string().min(1, "Minimum 1 Character Required"),
-        type: z.enum(["document", "youtube", "twitter", "otherlink"]),
         link: z.string().min(1, "Enter a valid link"),
         tags: z.string().transform((str) => str.split(",").map((s) => s.trim()))
             .refine((arr) => arr.length > 0, {
@@ -29,7 +27,7 @@ const AddContentModal = ({ toggleModal }: {
             })
     })
 
-    const postContent = async (data: { title: string, type: string, link: string, tags: string[] }) => {
+    const postContent = async (data: { title: string, link: string, tags: string[] }) => {
         const token = localStorage.getItem("Authorization");
         const response = await axios.post("http://localhost:3000/content", data, {
             headers: {
@@ -53,7 +51,7 @@ const AddContentModal = ({ toggleModal }: {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         try {
-            const result = contentSchema.parse({ title, type, link, tags })
+            const result = contentSchema.parse({ title, link, tags })
             mutation.mutate(result)
             toggleModal(false)
         } catch (error) {
@@ -66,7 +64,7 @@ const AddContentModal = ({ toggleModal }: {
     }
 
   return (
-    <div className="fixed inset-0 bg-zinc-950/70 flex items-center justify-center h-screen w-screen">
+    <div className="fixed z-50 inset-0 bg-zinc-950/70 flex items-center justify-center h-screen w-screen">
         <div className="bg-zinc-900 p-4 sm:p-6 md:p-8 rounded-lg shadow-lg w-full max-w-md font-mona relative">
             <button
                 className="absolute top-4 right-4 text-xl text-zinc-400 hover:text-zinc-200"
@@ -85,18 +83,6 @@ const AddContentModal = ({ toggleModal }: {
                         className="rounded-md p-2 bg-zinc-800 focus:ring-2 focus:ring-violet-500 focus:outline-none w-full placeholder:text-sm"
                         placeholder="Enter Content Title"
                     />
-                    <label htmlFor="type" className="text-sm text-zinc-200">Type</label>
-                    <select
-                        onChange={(e) => setType(e.target.value)}
-                        id="type"
-                        defaultValue="document"
-                        className="rounded-md p-2 bg-zinc-800 focus:ring-2 focus:ring-violet-500 focus:outline-none w-full sm:w-1/2 placeholder:text-sm"
-                    >
-                        <option value="document">Document</option>
-                        <option value="youtube">YouTube</option>
-                        <option value="twitter">Twitter</option>
-                        <option value="otherlink">Links</option>
-                    </select>
                     <label htmlFor="link" className="text-sm text-zinc-200">Link</label>
                     <input
                         onChange={(e) => setLink(e.target.value)}

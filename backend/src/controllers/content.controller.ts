@@ -1,8 +1,18 @@
 import { Request, Response } from "express";
 import { ContentModel, TagsModel, UserModel } from "../model";
 
-export const createContent = async (req: Request<{},{},{link:string, type:string, title: string, tags: string}>, res:Response):Promise<any> => {
-    const { link, type, title, tags } = req.body;
+export const typeOfContent = (link: string) => {
+    if (link.includes("youtube") || link.includes("youtu.be")) {
+        return "youtube"
+    } else if (link.includes("x.com") || link.includes("twitter.com")) {
+        return "twitter"
+    } else {
+        return "link"
+    }
+}
+
+export const createContent = async (req: Request<{},{},{link:string, title: string, tags: string}>, res:Response):Promise<any> => {
+    const { link, title, tags } = req.body;
     const firebaseUid = (req as any).uid;
 
     if (!firebaseUid) {
@@ -17,6 +27,8 @@ export const createContent = async (req: Request<{},{},{link:string, type:string
         if (!user) {
             return res.status(404).json({ message: "User not found in the database" });
         }
+
+        const type = typeOfContent(link);
 
         const tagArray = typeof tags === 'string' ? tags.split(",").map(tag => tag.trim()) : tags;
 
