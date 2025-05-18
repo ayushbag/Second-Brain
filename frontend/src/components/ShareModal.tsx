@@ -23,14 +23,15 @@ const ShareModal = ({ toggleShareBrainModal }: {
         &times;
       </button>
       <h2 className="text-xl sm:text-2xl font-semibold mb-6">Share Brain</h2>
-      <div className="flex items-center gap-2">
+      <div className="flex flex-col items-center gap-3">
         <input
-        type="text"
-        className="rounded-md p-2 bg-zinc-800 focus:ring-2 focus:ring-violet-500 focus:outline-none w-full placeholder:text-sm"
-        placeholder="Enter link"
+          type="text"
+          className="rounded-md p-2 bg-zinc-800 focus:ring-2 focus:ring-violet-500 focus:outline-none w-full placeholder:text-sm"
+          placeholder="link is here..."
+          value=""
         />
-        <button className="bg-gradient-to-b text-sm from-violet-700 to-purple-600 focus:ring-1 ring-violet-700 text-white rounded-md py-2 px-3">
-        Copy
+        <button className="px-4 bg-gradient-to-b text-sm from-violet-700 to-purple-600 focus:ring-1 ring-violet-700 text-white rounded-md py-2">
+        Enable Link
         </button>
       </div>
       </div>

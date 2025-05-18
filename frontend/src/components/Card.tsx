@@ -56,12 +56,12 @@ const Card = ({ text, tags, type, link, shortNote, contentId, date }: Card) => {
   const handleDeleteMutation = useMutation({
     mutationFn: () => handleDelete(contentId),
     onSuccess: () => {
-      toast.success("Content added successfully!");
+      toast.success("Content deleted successfully!");
       queryClient.invalidateQueries({ queryKey: ["content"] });
       queryClient.removeQueries({ queryKey: ["content"] });
     },
     onError: () => {
-      toast.error("Failed to add content");
+      toast.error("Failed to remove content");
     },
   });
 

@@ -20,7 +20,6 @@ export const createContent = async (req: Request<{},{},{link:string, title: stri
             message: "UserId not found in token"    
         })
     }
-
     try {
         const user = await UserModel.findOne({ firebaseUid })
 
@@ -90,9 +89,10 @@ export const getContent = async (req: Request, res: Response):Promise<any> => {
         })
 
         if (!content || content.length === 0) {
-            return res.status(403).json({
+            return res.status(201).json({
                 message: 'Content not found!',
-                content: []
+                content: [],
+                email: user.email
             })
         }
 

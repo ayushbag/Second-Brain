@@ -87,9 +87,10 @@ const getContent = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             transform: (doc) => doc.title
         });
         if (!content || content.length === 0) {
-            return res.status(403).json({
+            return res.status(201).json({
                 message: 'Content not found!',
-                content: []
+                content: [],
+                email: user.email
             });
         }
         return res.status(200).json({
