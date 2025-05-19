@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { generateIframeMarkup, twitterTweetId } from "../utils/embedConversions";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import LinkPreviewer from "./LinkPreviewer";
 import { Tweet } from "react-tweet"

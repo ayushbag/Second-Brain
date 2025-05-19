@@ -14,38 +14,52 @@ const model_1 = require("../model");
 const random_1 = require("../utils/random");
 const createSharableLink = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const share = req.body.share;
-    const userId = req.userId;
-    if (share) {
-        const existingLink = yield model_1.LinkModel.findOne({
-            userId: userId
-        });
-        if (existingLink) {
-            return res.status(201).json({
-                hash: existingLink.hash
+    const firebaseUid = req.uid;
+    if (!firebaseUid) {
+        return res.status(403).json({ message: "UserId not found in token" });
+    }
+    try {
+        const user = yield model_1.UserModel.findOne({ firebaseUid });
+        if (!user) {
+            return res.status(404).json({ message: "User not found in database" });
+        }
+        const userId = user._id;
+        if (share) {
+            const existingLink = yield model_1.LinkModel.findOne({ userId });
+            if (existingLink) {
+                return res.status(201).json({
+                    hash: existingLink.hash
+                });
+            }
+            const hash = (0, random_1.random)(10);
+            yield model_1.LinkModel.create({
+                userId,
+                hash
+            });
+            return res.status(200).json({
+                message: 'Link of Brain',
+                hash
             });
         }
-        const hash = (0, random_1.random)(10);
-        yield model_1.LinkModel.create({
-            userId,
-            hash: hash
-        });
-        return res.status(200).json({
-            message: 'Link of Brain',
-            hash
-        });
+        else {
+            yield model_1.LinkModel.deleteOne({ userId });
+            return res.status(200).json({
+                message: 'Removed Link'
+            });
+        }
     }
-    else {
-        yield model_1.LinkModel.deleteOne({
-            userId
-        });
+    catch (error) {
         return res.status(500).json({
-            message: 'Removed Link'
+            message: 'Error while handling share link',
+            error
         });
     }
 });
 exports.createSharableLink = createSharableLink;
 const getContentsViaShareLink = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const hash = req.params.shareLink;
+    // Add a log to ensure hash is coming correctly
+    console.log('Share link hash:', hash);
     const link = yield model_1.LinkModel.findOne({
         hash
     });
@@ -54,17 +68,17 @@ const getContentsViaShareLink = (req, res) => __awaiter(void 0, void 0, void 0, 
             message: 'Incorrect Input'
         });
     }
+    console.log('Link found:', link);
     const content = yield model_1.ContentModel.find({
         userId: link.userId
     });
-    console.log(content);
-    if (!content) {
+    if (!content || content.length === 0) {
         return res.status(403).json({
             message: 'Content Not Found'
         });
     }
     const user = yield model_1.UserModel.findOne({
-        userId: link.userId
+        firebaseUid: link.userId // Ensure you're using `firebaseUid` here
     });
     return res.status(200).json({
         message: 'Content found!',

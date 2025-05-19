@@ -5,7 +5,7 @@ import React, { useCallback, useState } from "react";
 import axios from "axios";
 import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../utils/firebaseAuth";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 
 const Register = () => {
   const [email, setEmail] = useState("");
@@ -26,7 +26,7 @@ const Register = () => {
                 if (resp.status === 200) {
                   localStorage.setItem("Authorization", idtoken);
                   navigate("/app")
-                  return toast.done("User Registered!")
+                  return toast.success("User Registered!")
                 } else {
                   return toast.error("Unable to register, try again!")
                 }

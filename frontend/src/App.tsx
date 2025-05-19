@@ -5,22 +5,27 @@ import Register from './pages/Register';
 import Landing from './pages/Landing';
 import CardContent from './pages/CardContent';
 import Test from './pages/Test';
-import { ToastContainer } from 'react-toastify';
+import { Toaster } from 'react-hot-toast';
+import SharePage from './pages/SharePage';
 
 function App() {
   return (
     <>
       <Routes>
         <Route path='/'>
-          <Route index element={<Landing />}/>
-          <Route path='/app' element={<Main />}/>  
-          <Route path='/login' element={<Login />}/>  
-          <Route path='/register' element={<Register />}/>  
-          <Route path='/contents' element={<CardContent />}/>  
+          <Route index element={<Landing />} />
+          <Route path='/app' element={<Main />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/register' element={<Register />} />
+          <Route path='/contents' element={<CardContent />} />
           <Route path='/test' element={<Test />} />
+          <Route path="/brain/:shareLink" element={<SharePage />} />
         </Route>
       </Routes>
-      <ToastContainer theme='dark'/>
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+      />
     </>
   );
 }

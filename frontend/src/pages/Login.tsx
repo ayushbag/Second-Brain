@@ -5,7 +5,7 @@ import { useCallback, useState } from "react";
 import axios from "axios";
 import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../utils/firebaseAuth";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 
 const Login = () => {
 
