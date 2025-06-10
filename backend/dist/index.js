@@ -14,6 +14,7 @@ const authMiddleware_1 = require("./middlewares/authMiddleware");
 const shareBrain_route_1 = require("./routes/shareBrain.route");
 const tags_routes_1 = require("./routes/tags.routes");
 const linkPreview_route_1 = require("./routes/linkPreview.route");
+const aiSearch_route_1 = require("./routes/aiSearch.route");
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use((0, cors_1.default)());
@@ -24,5 +25,6 @@ app.use("/content", authMiddleware_1.authMiddleware, content_route_1.contentRout
 app.use("/brain", shareBrain_route_1.brainShareRouter);
 app.use("/tags", authMiddleware_1.authMiddleware, tags_routes_1.tagsRouter);
 app.use("/link-preview", linkPreview_route_1.linkPreview);
+app.use("/ai-search", aiSearch_route_1.aiSearchRouter);
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Running on port ${PORT}`));
