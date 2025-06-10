@@ -10,6 +10,7 @@ import { brainShareRouter } from "./routes/shareBrain.route"
 import { tagsRouter } from "./routes/tags.routes"
 import { linkPreview } from "./routes/linkPreview.route"
 import { aiSearchRouter } from "./routes/aiSearch.route"
+import { aiQueryRouter } from "./routes/aiQuery.route"
 
 const app = express()
 
@@ -25,6 +26,7 @@ app.use("/brain", brainShareRouter)
 app.use("/tags", authMiddleware, tagsRouter)
 app.use("/link-preview", linkPreview)
 app.use("/ai-search", aiSearchRouter)
+app.use("/query-ai", aiQueryRouter)
 
 const PORT = process.env.PORT || 5000
 app.listen(PORT, () => console.log(`Running on port ${PORT}`))
