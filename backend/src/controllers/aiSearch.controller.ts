@@ -59,7 +59,7 @@ const StoreToDB = async ({ embedding, body, dbClient }: {
     dbClient: MongoClient
 }) => {
     try {
-        const collection = dbClient.db('scrapeDB').collection('WEB_COLLECTION');
+        const collection = dbClient.db('SecondBrain').collection('WEB_COLLECTION');
         await collection.insertOne({
             embeddings: embedding,
             metadata: [{ body }]
@@ -96,12 +96,12 @@ const chat = async ({ question = '', ai, dbClient }: {
 }) => {
     const questionEmbedding = await generateVectorEmbeddings({ text: question, ai });
 
-    const collection = dbClient.db('scrapeDB').collection('WEB_COLLECTION');
+    const collection = dbClient.db('SecondBrain').collection('WEB_COLLECTION');
 
     const result = await collection.aggregate([
         {
             $vectorSearch: {
-                index: "scrapeDB",
+                index: "SecondBrain",
                 path: "embeddings",
                 queryVector: questionEmbedding,
                 numCandidates: 100,

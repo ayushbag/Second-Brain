@@ -86,7 +86,7 @@ const generateVectorEmbeddings = (_a) => __awaiter(void 0, [_a], void 0, functio
 });
 const StoreToDB = (_a) => __awaiter(void 0, [_a], void 0, function* ({ embedding, body, dbClient }) {
     try {
-        const collection = dbClient.db('scrapeDB').collection('WEB_COLLECTION');
+        const collection = dbClient.db('SecondBrain').collection('WEB_COLLECTION');
         yield collection.insertOne({
             embeddings: embedding,
             metadata: [{ body }]
@@ -113,11 +113,11 @@ const ingest = (_a) => __awaiter(void 0, [_a], void 0, function* ({ url = 'local
 const chat = (_a) => __awaiter(void 0, [_a], void 0, function* ({ question = '', ai, dbClient }) {
     var _b, _c, _d, _e, _f;
     const questionEmbedding = yield generateVectorEmbeddings({ text: question, ai });
-    const collection = dbClient.db('scrapeDB').collection('WEB_COLLECTION');
+    const collection = dbClient.db('SecondBrain').collection('WEB_COLLECTION');
     const result = yield collection.aggregate([
         {
             $vectorSearch: {
-                index: "scrapeDB",
+                index: "SecondBrain",
                 path: "embeddings",
                 queryVector: questionEmbedding,
                 numCandidates: 100,
