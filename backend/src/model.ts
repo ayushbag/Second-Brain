@@ -1,4 +1,5 @@
 import { model, Schema, Types } from "mongoose";
+import { string } from "zod";
 
 const userSchema = new Schema({
     username: {
@@ -42,7 +43,15 @@ const linkSchema = new Schema({
     userId: { type: Types.ObjectId, ref: 'User' , required: true } 
 })
 
+const extractedLinkSchema = new Schema({
+    id: { type: Types.ObjectId, ref: 'Link', required: true },
+    link: { type: String, required: true },
+    title: { type: String, required: true },
+    description: { type: String, required: true }
+})
+
 export const UserModel = model('User', userSchema)
 export const ContentModel = model('Content', contentSchema)
 export const TagsModel = model('Tags', tagsSchema)
 export const LinkModel = model('Link', linkSchema)
+export const ExtractedLinkModel = model('ExtractedLink', extractedLinkSchema)

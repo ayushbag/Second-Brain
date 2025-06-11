@@ -26,7 +26,7 @@ app.use("/brain", brainShareRouter)
 app.use("/tags", authMiddleware, tagsRouter)
 app.use("/link-preview", linkPreview)
 app.use("/ai-search", aiSearchRouter)
-app.use("/query-ai", aiQueryRouter)
+app.use("/ai-query", aiQueryRouter)
 
 const PORT = process.env.PORT || 5000
 app.listen(PORT, () => console.log(`Running on port ${PORT}`))

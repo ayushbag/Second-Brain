@@ -1,47 +1,49 @@
-import { json, Request, Response } from "express";
-import { ContentModel, ExtractedLinkModel, UserModel } from "../model";
-import { ai } from "../ai";
-
-export const extractMetadata = async (req: Request, res: Response): Promise<any> => {
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.extractMetadata = void 0;
+const model_1 = require("../model");
+const ai_1 = require("../ai");
+const extractMetadata = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b, _c, _d, _e, _f;
     const { query } = req.body;
-    const firebaseUid = (req as any).uid;
-
+    const firebaseUid = req.uid;
     // Pull up the links from og db
     try {
-        const user = await UserModel.findOne({ firebaseUid });
-
+        const user = yield model_1.UserModel.findOne({ firebaseUid });
         if (!user) {
             return res.status(403).json({
                 message: "User not found! Login"
             });
         }
-
-        const links = await ContentModel.find({ userId: user._id }).select('link');
-
+        const links = yield model_1.ContentModel.find({ userId: user._id }).select('link');
         // extract the ogp data using Ai
-        const extractedData = await extractTheMetadataViaAi({ query, links });
-
+        const extractedData = yield extractTheMetadataViaAi({ query, links });
         // Adjust this according to the actual structure of extractedData
         // For example, if extractedData.candidates[0].content.parts[0].text exists:
-        const data = extractedData?.candidates?.[0]?.content?.parts?.[0]?.text ?? extractedData;
-
-        const rawData = data as string;
-
+        const data = (_f = (_e = (_d = (_c = (_b = (_a = extractedData === null || extractedData === void 0 ? void 0 : extractedData.candidates) === null || _a === void 0 ? void 0 : _a[0]) === null || _b === void 0 ? void 0 : _b.content) === null || _c === void 0 ? void 0 : _c.parts) === null || _d === void 0 ? void 0 : _d[0]) === null || _e === void 0 ? void 0 : _e.text) !== null && _f !== void 0 ? _f : extractedData;
+        const rawData = data;
         const cleaned = rawData
             .trim()
             .replace(/^```json\s*/, '')
             .replace(/```$/, '');
-
         const jsonData = JSON.parse(cleaned);
-
         // store it in DB
         res.status(200).json({
             message: 'Extracted Data and Stored in DB. Success!',
             data: jsonData
-        })  
-
-    } catch (error) {
-        console.log(`error in aiQueryController: ${error}`)
+        });
+    }
+    catch (error) {
+        console.log(`error in aiQueryController: ${error}`);
         res.status(500).json({
             message: "Internal Server Error",
             error
@@ -49,14 +51,11 @@ export const extractMetadata = async (req: Request, res: Response): Promise<any>
     }
     // make vector embeddings of that data
     // store and query to vector db
-}
-
-const extractTheMetadataViaAi = async ({ query = '', links }: {
-    query: string,
-    links: Object
-}) => {
+});
+exports.extractMetadata = extractMetadata;
+const extractTheMetadataViaAi = (_a) => __awaiter(void 0, [_a], void 0, function* ({ query = '', links }) {
     // get the links ogp data and extract the data as per query
-    const response = await ai.models.generateContent({
+    const response = yield ai_1.ai.models.generateContent({
         model: "gemini-1.5-flash",
         contents: `
             query: ${query},
@@ -99,8 +98,6 @@ const extractTheMetadataViaAi = async ({ query = '', links }: {
 
             `
         }
-    })
-
+    });
     return response;
-}
-
+});

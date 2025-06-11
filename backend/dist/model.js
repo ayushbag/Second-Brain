@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.LinkModel = exports.TagsModel = exports.ContentModel = exports.UserModel = void 0;
+exports.ExtractedLinkModel = exports.LinkModel = exports.TagsModel = exports.ContentModel = exports.UserModel = void 0;
 const mongoose_1 = require("mongoose");
 const userSchema = new mongoose_1.Schema({
     username: {
@@ -39,7 +39,14 @@ const linkSchema = new mongoose_1.Schema({
     hash: { type: String, required: true },
     userId: { type: mongoose_1.Types.ObjectId, ref: 'User', required: true }
 });
+const extractedLinkSchema = new mongoose_1.Schema({
+    id: { type: mongoose_1.Types.ObjectId, ref: 'Link', required: true },
+    link: { type: String, required: true },
+    title: { type: String, required: true },
+    description: { type: String, required: true }
+});
 exports.UserModel = (0, mongoose_1.model)('User', userSchema);
 exports.ContentModel = (0, mongoose_1.model)('Content', contentSchema);
 exports.TagsModel = (0, mongoose_1.model)('Tags', tagsSchema);
 exports.LinkModel = (0, mongoose_1.model)('Link', linkSchema);
+exports.ExtractedLinkModel = (0, mongoose_1.model)('ExtractedLink', extractedLinkSchema);

@@ -1,6 +1,8 @@
 import { Router } from "express";
-import { aiQueryController } from "../controllers/aiQuery.controller";
+import { extractMetadata } from "../controllers/aiQuery.controller";
+import { authMiddleware } from "../middlewares/authMiddleware";
 
 export const aiQueryRouter = Router()
 
-aiQueryRouter.post("/", aiQueryController)
+aiQueryRouter.post("/store", authMiddleware, extractMetadata)
+aiQueryRouter.post("/query", authMiddleware, )
