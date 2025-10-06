@@ -36,11 +36,30 @@ const extractMetadata = (req, res) => __awaiter(void 0, void 0, void 0, function
             .replace(/^```json\s*/, '')
             .replace(/```$/, '');
         const jsonData = JSON.parse(cleaned);
-        // store it in DB
-        res.status(200).json({
-            message: 'Extracted Data and Stored in DB. Success!',
-            data: jsonData
-        });
+        try {
+            // store it in DB
+            // ⚠ Update the DB with changes only
+            model_1.ExtractedLinkModel.deleteMany()
+                .then(() => {
+                return model_1.ExtractedLinkModel.create(jsonData);
+            })
+                .then(() => {
+                console.log("Deletion and creation done.");
+            })
+                .catch(err => {
+                console.error("Error during delete/create", err);
+            });
+            res.status(200).json({
+                message: 'Extracted Data and Stored in DB. Success!',
+                data: jsonData
+            });
+        }
+        catch (error) {
+            res.status(500).json({
+                message: "Error while Storing in DB!",
+                error
+            });
+        }
     }
     catch (error) {
         console.log(`error in aiQueryController: ${error}`);
@@ -56,7 +75,7 @@ exports.extractMetadata = extractMetadata;
 const extractTheMetadataViaAi = (_a) => __awaiter(void 0, [_a], void 0, function* ({ query = '', links }) {
     // get the links ogp data and extract the data as per query
     const response = yield ai_1.ai.models.generateContent({
-        model: "gemini-1.5-flash",
+        model: "gemini-2.5-flash-preview-05-20",
         contents: `
             query: ${query},
             links: ${links} 
@@ -66,13 +85,14 @@ const extractTheMetadataViaAi = (_a) => __awaiter(void 0, [_a], void 0, function
                 You are an expert web data extractor. You are given a user query that defines what to extract, along with a list of link objects. Each object contains a URL (link) and a unique identifier (id).
 
                 For any link that contains "x.com" or "twitter.com", you must call the Twitter oEmbed API using the following format:  
-                curl https://publish.twitter.com/oembed?url=[link_here]  
+                run this in terminal -> curl https://publish.twitter.com/oembed?url=[link_here]  
                 For example:  
                 https://publish.twitter.com/oembed?url=https://x.com/mannupaaji/status/1833878491470713108
-
-                From the response, extract the title and description as follows:
+                and From the response, extract the title and description as follows:
                 - The title should be set to the tweet author's name, such as: "Tweet by [author name]", based on the 'author_name' field.
-                - The description should capture the main tweet content. Use your intelligence to extract meaningful text from the 'html' field, avoiding raw HTML, links, or embedded elements.
+                - The description should capture the main tweet content. Use your intelligence to extract tweet content from the "html" field.
+
+                For any youtube link that contains "youtube.com" or "yout.ube" just get title from head tag and description from metatag.
 
                 For all links that do not contain "x.com" or "twitter.com", you must extract metadata from the <head> section of the HTML using Open Graph Protocol (OGP) tags. Specifically, attempt to extract the following:
                 - Use the content of the meta tag with property og:title as the title.
@@ -82,7 +102,7 @@ const extractTheMetadataViaAi = (_a) => __awaiter(void 0, [_a], void 0, function
                 - If og:title is missing, check for twitter:title, <title>, or any other meta tag that appears to represent the title.
                 - If og:description is missing, check for twitter:description, description, or other relevant meta tags that describe the content.
 
-                If no valid metadata is found from these standard tags, examine the link structure and domain to infer what kind of site it is (e.g. GitHub, YouTube, blog, documentation site), and use your reasoning to identify the most meaningful title or description that appears in the metadata.
+                IMPORTANT: If title and desciption is null, examine the link structure and domain to infer what kind of site it is (e.g. GitHub, YouTube, blog, documentation site), and use your reasoning to identify the most meaningful title or description that appears in the metadata.
 
                 You must not extract content from the HTML <body> or visible page layout. Only use metadata explicitly defined in the <head> section. If you still cannot find suitable metadata, return null for that field.
 
@@ -95,7 +115,6 @@ const extractTheMetadataViaAi = (_a) => __awaiter(void 0, [_a], void 0, function
                 }
 
                 Do not include any HTML content, body content, or unrelated page data. Do not summarize, infer, or guess values that are not explicitly present. Only use metadata from the page's head section or from the Twitter oEmbed response. Do not include the original user query in your output.
-
             `
         }
     });
