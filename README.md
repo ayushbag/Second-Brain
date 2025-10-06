@@ -1,7 +1,3 @@
-Here’s a clean, professional README for your **Second Brain** project that you can directly use for GitHub:
-
----
-
 # 📚 Second Brain
 
 Second Brain is a **personal knowledge management system** built with the MERN stack (React + Express + MongoDB) that allows users to store links (YouTube, Twitter, articles, etc.) and search through them intelligently using **Retrieval-Augmented Generation (RAG)** AI.
